@@ -1,0 +1,14 @@
+{
+  "source": "dosm",
+  "dataset": "ppi_sitc",
+  "request_url": "https://storage.dosm.gov.my/ppi/ppi_sitc.csv",
+  "resolved_url": "https://storage.dosm.gov.my/ppi/ppi_sitc.csv",
+  "http_status": 200,
+  "retrieved_at_utc": "2026-10-11T16:09:31+00:00",
+  "sha256": "482c1567e78428cbd8ee4b24edff21afa0ab7ee9d963598d6f0d05f167b2c817",
+  "bytes": 146747,
+  "schema_version": "1.0",
+  "row_count": 200,
+  "snapshot_id": "dosm.ppi_sitc.2026-10-11.482c1567e784",
+  "filename": "ppi_sitc.csv"
+}

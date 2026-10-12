@@ -1,0 +1,125 @@
+{
+  "generated_at_utc": "2026-10-12T00:53:25+00:00",
+  "gate_g1_passed": true,
+  "o1_passed": true,
+  "selected_primary_target": "palm_wb_myr",
+  "selected_secondary_target": "ppi_oilsfats_my",
+  "palm_wb_myr_months": 277,
+  "ppi_oilsfats_my_months": 200,
+  "palm_ppi_return_correlation": 0.540301510472606,
+  "palm_ppi_overlap_months": 196,
+  "revisions_count": 0,
+  "series_summaries": {
+    "palm_wb_usd": {
+      "series_id": "palm_wb_usd",
+      "snapshot_id": "worldbank.pink_sheet.2026-10-11.ea1c35082787",
+      "row_count": 801,
+      "start_month": "1960-01-01",
+      "end_month": "2026-09-01",
+      "min_value": 142.0,
+      "max_value": 1777.0,
+      "is_contiguous": true,
+      "has_duplicates": false,
+      "has_nonpositive": false
+    },
+    "palm_wb_myr": {
+      "series_id": "palm_wb_myr",
+      "snapshot_id": "worldbank.pink_sheet.2026-10-11.ea1c35082787+bnm.exchangerates_daily_1700.2026-10-12.fe359d6eed30",
+      "row_count": 277,
+      "start_month": "2003-05-01",
+      "end_month": "2026-05-01",
+      "min_value": 1592.1999999999998,
+      "max_value": 7529.216699999999,
+      "is_contiguous": true,
+      "has_duplicates": false,
+      "has_nonpositive": false
+    },
+    "ppi_oilsfats_my": {
+      "series_id": "ppi_oilsfats_my",
+      "snapshot_id": "dosm.ppi_sitc.2026-10-11.482c1567e784",
+      "row_count": 200,
+      "start_month": "2010-01-01",
+      "end_month": "2026-08-01",
+      "min_value": 84.0,
+      "max_value": 141.9,
+      "is_contiguous": true,
+      "has_duplicates": false,
+      "has_nonpositive": false
+    },
+    "brent_wb_usd": {
+      "series_id": "brent_wb_usd",
+      "snapshot_id": "worldbank.pink_sheet.2026-10-11.ea1c35082787",
+      "row_count": 801,
+      "start_month": "1960-01-01",
+      "end_month": "2026-09-01",
+      "min_value": 1.2,
+      "max_value": 133.9,
+      "is_contiguous": true,
+      "has_duplicates": false,
+      "has_nonpositive": false
+    },
+    "soyoil_wb_usd": {
+      "series_id": "soyoil_wb_usd",
+      "snapshot_id": "worldbank.pink_sheet.2026-10-11.ea1c35082787",
+      "row_count": 801,
+      "start_month": "1960-01-01",
+      "end_month": "2026-09-01",
+      "min_value": 157.0,
+      "max_value": 1963.0,
+      "is_contiguous": true,
+      "has_duplicates": false,
+      "has_nonpositive": false
+    },
+    "usdmyr_avg": {
+      "series_id": "usdmyr_avg",
+      "snapshot_id": "bnm.exchangerates_daily_1700.2026-10-12.fe359d6eed30",
+      "row_count": 277,
+      "start_month": "2003-05-01",
+      "end_month": "2026-05-01",
+      "min_value": 2.9852333333333334,
+      "max_value": 4.770784210526316,
+      "is_contiguous": true,
+      "has_duplicates": false,
+      "has_nonpositive": false
+    },
+    "exports_sitc4": {
+      "series_id": "exports_sitc4",
+      "snapshot_id": "dosm.trade_sitc_1d.2026-10-11.6566da79934f",
+      "row_count": 319,
+      "start_month": "2000-01-01",
+      "end_month": "2026-07-01",
+      "min_value": 798687254.0,
+      "max_value": 11093557354.0,
+      "is_contiguous": true,
+      "has_duplicates": false,
+      "has_nonpositive": false
+    }
+  },
+  "definition_breaks": [
+    {
+      "date": "2001-12-01",
+      "basis": "Palm oil (Malaysia), RBD, CIF Rotterdam (previously Malaysia 5%, CIF N.W. Europe, bulk)"
+    },
+    {
+      "date": "2021-01-01",
+      "basis": "Palm oil (Malaysia), RBD, FOB Malaysia Ports"
+    },
+    {
+      "date": "2024-11-01",
+      "basis": "Palm oil (Malaysia), 5% Bulk, CIF North West Europe"
+    },
+    {
+      "date": "2025-02-01",
+      "basis": "Palm oil (Malaysia), Crude, DAP"
+    },
+    {
+      "date": "2026-01-01",
+      "basis": "Palm oil (Malaysia), RBD, average export price FOB (October 2026 replacement series)"
+    }
+  ],
+  "reasons": [
+    "palm_wb_myr has 277 contiguous monthly observations (>= 180 required for O1).",
+    "ppi_oilsfats_my has 200 contiguous monthly observations (>= 200 required).",
+    "Monthly log-return correlation between palm_wb_myr and ppi_oilsfats_my is 0.5403 (n=196)."
+  ]
+}

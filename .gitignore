@@ -1,0 +1,44 @@
+# Environments and caches
+.venv/
+env/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution and packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Testing and linting
+.pytest_cache/
+.pytest_tmp/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local experiment runs and tracking
+mlruns/
+mlartifacts/
+mlflow.db
+
+# Rebuildable processed data and generated prediction parquets.
+# Raw snapshots under data/raw/ are CC BY 4.0 and are committed.
+data/processed/*.parquet
+reports/*.parquet
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Validation predictions are evaluation evidence: selection and coverage are derived from them.
+!reports/predictions*.parquet
+
+# The forecast ledger is the append-only record the scheduled pipeline scores against.
+!data/processed/forecast_ledger.parquet

@@ -1,0 +1,47 @@
+name: PalmGuard CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  quality-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies from lock file
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.lock.txt
+          pip install -e ".[dev]"
+
+      - name: Lint and format check with ruff
+        run: |
+          ruff check src tests
+          ruff format --check src tests
+
+      - name: Run offline test suite with coverage
+        run: |
+          pytest -v --cov=palmguard --cov-report=term-missing
+
+      - name: Build Docker image
+        run: |
+          docker build -t palmguard-api:test .
+
+      - name: Run Docker container smoke test
+        run: |
+          docker run -d --name palmguard-container -p 8000:8000 palmguard-api:test
+          # Wait for container startup and poll readiness via smoke test
+          python scripts/smoke_api.py --base-url http://localhost:8000 --retries 15
+          docker stop palmguard-container

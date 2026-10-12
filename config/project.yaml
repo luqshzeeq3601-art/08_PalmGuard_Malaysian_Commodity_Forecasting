@@ -1,0 +1,115 @@
+project:
+  name: "PalmGuard"
+  version: "0.1.0"
+  seed: 42
+  origin_day_of_month: 8
+  primary_target: "palm_wb_myr"
+  secondary_target: "ppi_oilsfats_my"
+  frozen_vintage_date: "2026-10-11"
+
+paths:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  artifacts_dir: "artifacts/champion"
+  reports_dir: "reports"
+  published_dir: "reports/published"
+  queries_dir: "queries"
+  mlflow_tracking_uri: "sqlite:///mlflow.db"
+
+publication_lags:
+  palm_wb_usd: 1
+  palm_wb_myr: 1
+  brent_wb_usd: 1
+  soyoil_wb_usd: 1
+  usdmyr_avg: 1
+  ppi_oilsfats_my: 2
+  exports_sitc4: 3
+
+publication_schedule:
+  worldbank_pink_sheet: "2nd to 5th business day of month m+1 for month m (e.g. 2026-10-02 for 2026-09)"
+  bnm_exchangerates_daily_1700: "Daily at 17:00 MYT on trading days; month m complete by 1st of month m+1"
+  dosm_ppi_sitc: "Around 28th of month m+1 for month m; on the 8th of m+1 latest available is m-1 (lag 2)"
+  dosm_trade_sitc_1d: "Catalogue dataset on data.gov.my lags 2 months behind Pink Sheet; on the 8th of m+1 latest available is m-2 (lag 3)"
+
+horizons: [1, 2, 3]
+
+targets:
+  palm_wb_myr:
+    series_id: "palm_wb_myr"
+    display_name: "Malaysian palm oil price (World Bank Pink Sheet, MYR/mt)"
+    short_description: >-
+      World Bank Commodity Price Data (Pink Sheet) 'Palm oil' series (USD/mt) converted to MYR/mt
+      using the monthly mean BNM daily 17:00 middle USD/MYR exchange rate. Predominantly refined
+      (RBD) Malaysian palm oil with documented World Bank basis splices; not the MPOB local delivered CPO price.
+    unit: "RM/mt"
+    min_history_months: 180
+    min_training_months: 120
+    validation_origins: 60
+    holdout_origins: 24
+    definition_breaks:
+      - date: "2001-12-01"
+        basis: "Palm oil (Malaysia), RBD, CIF Rotterdam (previously Malaysia 5%, CIF N.W. Europe, bulk)"
+      - date: "2021-01-01"
+        basis: "Palm oil (Malaysia), RBD, FOB Malaysia Ports"
+      - date: "2024-11-01"
+        basis: "Palm oil (Malaysia), 5% Bulk, CIF North West Europe"
+      - date: "2025-02-01"
+        basis: "Palm oil (Malaysia), Crude, DAP"
+      - date: "2026-01-01"
+        basis: "Palm oil (Malaysia), RBD, average export price FOB (October 2026 replacement series)"
+
+  ppi_oilsfats_my:
+    series_id: "ppi_oilsfats_my"
+    display_name: "DOSM Producer Price Index — SITC Section 4: Animal and vegetable oils and fats (2010=100)"
+    short_description: >-
+      Department of Statistics Malaysia (DOSM) monthly Producer Price Index (local production) for
+      SITC Section 4 ('Animal and vegetable oils, and fats', base 2010 = 100), retrieved via data.gov.my.
+    unit: "Index (2010=100)"
+    min_history_months: 200
+    min_training_months: 96
+    validation_origins: 48
+    holdout_origins: 24
+    definition_breaks: []
+
+modelling:
+  seed: 42
+  arima_orders:
+    - [0, 1, 1]
+    - [1, 1, 0]
+  lgbm:
+    n_estimators: 200
+    objective: "regression"
+    grid:
+      num_leaves: [4, 8]
+      min_child_samples: [5, 10]
+      learning_rate: [0.03, 0.08]
+  selection:
+    relative_mase_tie_threshold: 0.02
+    simplicity_order: ["B1", "B2", "B3", "B4", "M1", "M2"]
+  objectives:
+    o2_h1_mase_max: 0.95
+    o3_coverage_tolerance: 0.05
+
+conformal:
+  levels: [0.80, 0.90]
+  window_size: 60
+  aci_gamma: 0.05
+
+monitoring:
+  rolling_windows_months: [12, 24]
+  drift_recent_months: 24
+  psi_threshold: 0.25
+  ks_alpha: 0.05
+
+attribution:
+  licence: "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)"
+  sources:
+    - "World Bank Commodity Price Data (The Pink Sheet), CC BY 4.0 (https://datacatalog.worldbank.org/public-licenses)"
+    - "Bank Negara Malaysia (BNM) via data.gov.my, CC BY 4.0"
+    - "Department of Statistics Malaysia (DOSM) OpenDOSM / data.gov.my, CC BY 4.0"
+  transformation_note: >-
+    Values were transformed from source publications by computing monthly trading-day mean USD/MYR
+    middle rates, converting USD/mt commodity prices to MYR/mt, and computing monthly log returns.
+  disclaimer: >-
+    PalmGuard is a forecasting demonstrator. It is not trading, investment or procurement advice.
+    No financial benefit was measured. Interval coverage is empirical on historical data and is not guaranteed.
