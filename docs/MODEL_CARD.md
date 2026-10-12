@@ -96,8 +96,8 @@ Evaluated across **24 rolling holdout origins** (scored once behind an automated
    - `ppi_oilsfats_my`: **MET** (Validation $h=1$ MASE was 0.5515).
 3. **Objective O3 (Validation Coverage within ±5 pp of Nominal)**: **MISSED** on both series. Interval method C2 (adaptive conformal) was selected on validation. Largest validation gap from nominal: `palm_wb_myr` 6.7 pp, `ppi_oilsfats_my` 9.6 pp, against a ±5 pp target. On the holdout, palm oil coverage was 77% to 83% at the 80% level; PPI bands were too narrow (59% to 70% at the 80% level). Full table: `reports/validation_coverage.csv`, `reports/holdout_coverage.csv`.
 4. **Objective O4 (No Leakage)**: **PASSED**. Future mutation, DuckDB window static text, label cutoff, and publication lag tests passed with zero leaks.
-5. **Objective O5 (Three Consecutive Scheduled Runs)**: **NOT YET MET**. The pipeline is idempotent locally and the cron workflows are written, but no scheduled run has executed because the repository has no GitHub remote.
-6. **Objective O6 (Public API and Dashboard URLs)**: **NOT YET MET**. The API passes the smoke test on localhost only; nothing is deployed and the Docker image has not been built in CI.
+5. **Objective O5 (Three Consecutive Scheduled Runs)**: **NOT YET MET**. A manual workflow dispatch succeeded on 2026-10-12 and published artifacts, but three consecutive scheduled runs have not happened yet.
+6. **Objective O6 (Public API and Dashboard URLs)**: **NOT YET MET**. The Docker image builds and passes the container smoke test in CI, but no public API or dashboard URL is deployed.
 
 ---
 

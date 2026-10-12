@@ -2,8 +2,8 @@
 
 ## 1. Status and rules
 
-- Current status: 22/25 complete, Gates G0 to G4 and G7 passed, 2026-10-12. T18, T21 and T23 are built but their verification needs the GitHub push and hosting accounts.
-- Next task: push to GitHub, then verify T18 and T21 (G5), then deploy for T23 (G6).
+- Current status: 24/25 complete, Gates G0 to G5 and G7 passed, 2026-10-12. Only T23 (public deployment, G6) remains; it needs Render and Streamlit Community Cloud accounts.
+- Next task: T23.
 - Tick a task only after its acceptance and verification pass; record evidence in ../docs/10_PROGRESS_LOG.md.
 - Size: S = 1-2 implementation files; M = 3-5.
 - Commands are planned interfaces until the owning task implements them.
@@ -124,7 +124,7 @@
   - Dependencies: T16. Size: S.
   - Files: src/palmguard/monitoring.py, tests/test_monitoring.py.
 
-- [ ] **T18 — Scheduled workflow and publish** (workflows written; manual dispatch not run, no remote)
+- [x] **T18 — Scheduled workflow and publish**
   - Acceptance: monthly and weekly cron, manual dispatch, concurrency guard; new snapshots and published artifacts committed with the default token.
   - Verify: manual dispatch succeeds and a commit to `data/raw/` and `reports/published/` appears; workflow permissions documented in 08_OPERATIONS_AND_COMMANDS.md; G5.
   - Dependencies: T17. Size: S.
@@ -144,7 +144,7 @@
   - Dependencies: T19. Size: S.
   - Files: src/palmguard/api.py, tests/test_api.py.
 
-- [ ] **T21 — Docker and CI** (files written; image never built, no CI run on GitHub)
+- [x] **T21 — Docker and CI**
   - Acceptance: image builds; container passes the smoke test in CI; no test uses the network.
   - Verify: CI run green on GitHub.
   - Dependencies: T20. Size: M.

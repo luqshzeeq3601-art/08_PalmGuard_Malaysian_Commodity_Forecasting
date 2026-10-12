@@ -127,10 +127,10 @@ A production multi-stage Docker container is provided:
 docker build -t palmguard:latest .
 docker run -p 8000:8000 palmguard:latest
 ```
-Deployment status: **not deployed yet**. No public URL, CI run or scheduled run exists until the repository is pushed to GitHub and the hosting accounts are created.
+Deployment status: CI (tests, Docker build, container smoke test) and the pipeline workflow run on GitHub Actions. The API and dashboard are **not deployed to a public URL yet**.
 - **API**: Configured for Render free-tier via [`render.yaml`](render.yaml).
 - **Dashboard**: Runs locally; intended for Streamlit Community Cloud.
-- **Scheduled Pipeline**: Workflow defined, not yet run: GitHub Actions monthly refresh on the 8th via [`.github/workflows/pipeline.yml`](.github/workflows/pipeline.yml).
+- **Scheduled Pipeline**: GitHub Actions monthly refresh on the 8th via [`.github/workflows/pipeline.yml`](.github/workflows/pipeline.yml).
 
 ---
 
