@@ -401,3 +401,12 @@
   - Manual dispatch run 38191449036 (`mode=full`): success. All five sources `no_change`, 6 forecasts published, bot commit `181c7a2` updated `reports/published/`. No new raw snapshot was committed because no source had changed.
 - Checkpoint Gate G5: PASSED. Gate G6 remains partial: CI is green but T23 public deployment is not done.
 - O5 status: pending. First scheduled runs are due on the weekly and monthly cron.
+
+## 2026-10-12 — Gaps closed inside T17, T19 and T22
+
+- T17 monitoring: `queries/scoring.sql` now computes a per-forecast scaled error (`mase`, scale = mean absolute one-step change up to the origin), so rolling MASE in `monitoring.json` is populated once forecasts are scored. Added `tests/test_monitoring.py` with hand-calculated rolling values and a hand-computed scoring case.
+- T19 CLI: `palmguard score` uses every snapshot retrieved so far, like the pipeline; `--offline` scores against the frozen vintage.
+- T22 dashboard: added forecast versus actual, interval coverage over time (rolling 12 origins) and error by horizon, with backtest and live sections labelled separately. Backtest intervals of the selected method are written to `reports/validation_intervals.csv` and `reports/holdout_intervals.csv`.
+  - Checked in a browser: page renders with 4 charts and no exception. The live section is empty until the first forecast is scored.
+- Status lines in `tasks/plan.md` and `docs/01_PROBLEM_AND_OBJECTIVES.md` no longer say implementation has not started.
+- `ruff check` and `ruff format --check`: clean. `pytest`: 83 passed.

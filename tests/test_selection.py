@@ -119,7 +119,7 @@ def test_champion_selection_tie_rule() -> None:
         ]
     )
 
-    sec_rec, _, _ = select_champion_and_interval("palm_wb_myr", pred_df, panel_df, cfg)
+    sec_rec, _, _, _ = select_champion_and_interval("palm_wb_myr", pred_df, panel_df, cfg)
     assert sec_rec.champion_model == "B1"
     assert "simpler" in sec_rec.champion_reason.lower()
 

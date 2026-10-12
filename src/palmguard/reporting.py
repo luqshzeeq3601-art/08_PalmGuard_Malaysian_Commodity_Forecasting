@@ -57,6 +57,18 @@ COVERAGE_COLUMNS = [
 ]
 
 
+def label_intervals(
+    intervals_df: pd.DataFrame, series_id: str, model: str, interval_method: str, split: str
+) -> pd.DataFrame:
+    """Tag per-forecast interval rows so backtest intervals can be published and plotted."""
+    out = intervals_df.copy()
+    out.insert(0, "split", split)
+    out.insert(0, "interval_method", interval_method)
+    out.insert(0, "model", model)
+    out.insert(0, "series_id", series_id)
+    return out
+
+
 class SeriesSelectionRecord(BaseModel):
     """Selection record for a specific series."""
 
@@ -222,10 +234,11 @@ def select_champion_and_interval(
     predictions_df: pd.DataFrame,
     panel_df: pd.DataFrame,
     cfg: ProjectConfig,
-) -> tuple[SeriesSelectionRecord, ConformalTracker, pd.DataFrame]:
+) -> tuple[SeriesSelectionRecord, ConformalTracker, pd.DataFrame, pd.DataFrame]:
     """Apply selection rules to choose champion forecaster and conformal interval method.
 
-    Also returns the validation coverage table for both interval methods.
+    Also returns the validation coverage table for both interval methods and the
+    per-forecast validation intervals of the selected method.
     """
     s_panel = panel_df[panel_df["series_id"] == series_id].set_index("month")["value"]
     sub_s = predictions_df[predictions_df["series_id"] == series_id]
@@ -277,6 +290,7 @@ def select_champion_and_interval(
     method_evals: dict[str, dict[str, float]] = {}
     trackers: dict[str, ConformalTracker] = {}
     coverage_frames: list[pd.DataFrame] = []
+    interval_frames: dict[str, pd.DataFrame] = {}
 
     for method in ["C1", "C2"]:
         tr = ConformalTracker(
@@ -286,6 +300,7 @@ def select_champion_and_interval(
         )
         trackers[method] = tr
         intervals_df = replay_conformal_intervals(tr, champ_preds, origin_prices, method)
+        interval_frames[method] = intervals_df
         cov_df = summarise_interval_coverage(
             intervals_df, series_id, champion, method, "validation"
         )
@@ -321,7 +336,10 @@ def select_champion_and_interval(
 
     coverage_df = pd.concat(coverage_frames, ignore_index=True)
     coverage_df["selected"] = coverage_df["interval_method"] == best_iv_method
-    return sec_rec, trackers[best_iv_method], coverage_df
+    selected_intervals = label_intervals(
+        interval_frames[best_iv_method], series_id, champion, best_iv_method, "validation"
+    )
+    return sec_rec, trackers[best_iv_method], coverage_df, selected_intervals
 
 
 def execute_validation_selection(
@@ -364,11 +382,15 @@ def execute_validation_selection(
     series_records: dict[str, SeriesSelectionRecord] = {}
     conformal_states: dict[str, Any] = {}
     coverage_frames: list[pd.DataFrame] = []
+    interval_frames: list[pd.DataFrame] = []
 
     for sid in cfg.targets.keys():
-        s_rec, final_tracker, cov_df = select_champion_and_interval(sid, preds_all, panel_df, cfg)
+        s_rec, final_tracker, cov_df, iv_df = select_champion_and_interval(
+            sid, preds_all, panel_df, cfg
+        )
         series_records[sid] = s_rec
         coverage_frames.append(cov_df)
+        interval_frames.append(iv_df)
 
         # Serialise conformal state
         conformal_states[sid] = {
@@ -385,6 +407,10 @@ def execute_validation_selection(
     # Validation coverage for both interval methods (Objective O3 evidence)
     pd.concat(coverage_frames, ignore_index=True).to_csv(
         reports_dir / "validation_coverage.csv", index=False
+    )
+    # Per-forecast backtest intervals of the selected method (dashboard: coverage over time)
+    pd.concat(interval_frames, ignore_index=True).to_csv(
+        reports_dir / "validation_intervals.csv", index=False
     )
 
     full_selection = FullSelectionRecord(

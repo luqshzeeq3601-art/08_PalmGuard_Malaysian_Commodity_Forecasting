@@ -20,7 +20,9 @@ st.set_page_config(
 )
 
 PUBLISHED_DIR = Path("reports/published")
+REPORTS_DIR = Path("reports")
 ARTIFACTS_DIR = Path("artifacts/champion")
+ROLLING_ORIGINS = 12
 
 
 def load_forecasts() -> dict:
@@ -44,6 +46,26 @@ def load_history() -> pd.DataFrame:
     if not hpath.exists():
         return pd.DataFrame()
     return pd.read_parquet(hpath)
+
+
+def load_csv(name: str) -> pd.DataFrame:
+    path = REPORTS_DIR / name
+    return pd.read_csv(path) if path.exists() else pd.DataFrame()
+
+
+def load_backtest_intervals() -> pd.DataFrame:
+    """Per-forecast backtest intervals of the selected method, validation then holdout."""
+    frames = [load_csv("validation_intervals.csv"), load_csv("holdout_intervals.csv")]
+    frames = [f for f in frames if not f.empty]
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+
+
+def load_champions() -> dict:
+    mpath = ARTIFACTS_DIR / "metadata.json"
+    if not mpath.exists():
+        return {}
+    with open(mpath, encoding="utf-8") as f:
+        return json.load(f).get("selected_champions", {})
 
 
 # Title and Header
@@ -83,7 +105,7 @@ selected_series = st.sidebar.selectbox(
 tab_forecast, tab_eval, tab_drift, tab_sources = st.tabs(
     [
         "📈 Live Forecast & Bands",
-        "📊 Performance & Holdout",
+        "📊 Backtest & Live Performance",
         "🔍 Drift & Monitoring",
         "ℹ️ Data & Licences",
     ]
@@ -141,15 +163,92 @@ with tab_forecast:
         st.info("No forecast rows found for this series.")
 
 with tab_eval:
-    st.subheader("Model Validation & Holdout Benchmark")
-    st.markdown(
-        "Evaluation strictly follows the frozen experiment plan (`05_FORECAST_EXPERIMENT_PLAN.md`). "
-        "Holdout evaluation (24 rolling origins) was scored **once** behind Checkpoint Gate G4."
+    st.subheader("Backtest: Validation & Holdout")
+    st.caption(
+        "BACKTEST. Rolling-origin forecasts on historical data. The holdout (24 origins) was "
+        "scored once behind Checkpoint Gate G4. These are not live forecasts."
     )
 
-    holdout_path = Path("reports/holdout_metrics.csv")
-    if holdout_path.exists():
-        h_df = pd.read_csv(holdout_path)
+    champion = load_champions().get(selected_series, "")
+    bt = load_backtest_intervals()
+    s_bt = bt[bt["series_id"] == selected_series] if not bt.empty else bt
+
+    if not s_bt.empty:
+        horizon = st.selectbox("Horizon (months ahead)", sorted(s_bt["horizon"].unique()))
+        h_bt = s_bt[s_bt["horizon"] == horizon].sort_values("target")
+        method = h_bt["interval_method"].iloc[0]
+        band = h_bt[h_bt["nominal_level"] == 0.8]
+        dates = pd.to_datetime(band["target"])
+        holdout_start = pd.to_datetime(h_bt.loc[h_bt["split"] == "holdout", "target"]).min()
+
+        # Forecast versus actual
+        st.markdown(f"### Forecast versus actual (champion {champion}, h={horizon})")
+        fig, ax = plt.subplots(figsize=(10, 4))
+        ax.fill_between(
+            dates,
+            band["lower_bound"],
+            band["upper_bound"],
+            color="teal",
+            alpha=0.25,
+            label=f"80% band ({method})",
+        )
+        ax.plot(dates, band["actual"], color="black", lw=1.5, label="Actual")
+        ax.plot(dates, band["prediction"], color="navy", lw=1.5, linestyle="--", label="Forecast")
+        if pd.notna(holdout_start):
+            ax.axvline(holdout_start, color="grey", linestyle=":", label="Holdout starts")
+        ax.set_ylabel("Price / Index Value")
+        ax.grid(True, linestyle=":", alpha=0.6)
+        ax.legend(loc="upper left")
+        st.pyplot(fig)
+        plt.close(fig)
+
+        # Coverage over time
+        st.markdown(f"### Interval coverage over time (rolling {ROLLING_ORIGINS} origins)")
+        fig, ax = plt.subplots(figsize=(10, 3.5))
+        for level, color in [(0.8, "teal"), (0.9, "darkorange")]:
+            lvl = h_bt[h_bt["nominal_level"] == level]
+            rolling = lvl["hit"].astype(float).rolling(ROLLING_ORIGINS).mean()
+            ax.plot(pd.to_datetime(lvl["target"]), rolling, color=color, label=f"{level:.0%} band")
+            ax.axhline(level, color=color, linestyle="--", lw=1, alpha=0.7)
+        if pd.notna(holdout_start):
+            ax.axvline(holdout_start, color="grey", linestyle=":", label="Holdout starts")
+        ax.set_ylim(0, 1.05)
+        ax.set_ylabel("Share of actuals inside band")
+        ax.grid(True, linestyle=":", alpha=0.6)
+        ax.legend(loc="lower left")
+        st.pyplot(fig)
+        plt.close(fig)
+        st.caption("Dashed lines are the nominal levels. Coverage is empirical, not guaranteed.")
+    else:
+        st.info("No backtest interval files found. Run `palmguard select` and `palmguard holdout`.")
+
+    # Error by horizon
+    metrics = pd.concat(
+        [load_csv("validation_metrics.csv"), load_csv("holdout_metrics.csv")], ignore_index=True
+    )
+    if not metrics.empty and champion:
+        champ_m = metrics[
+            (metrics["series_id"] == selected_series)
+            & (metrics["model"] == champion)
+            & (metrics["horizon"].astype(str) != "pooled")
+        ]
+        if not champ_m.empty:
+            st.markdown(f"### Error by horizon (champion {champion})")
+            pivot = champ_m.assign(horizon=champ_m["horizon"].astype(int)).pivot(
+                index="horizon", columns="split", values="mase"
+            )
+            fig, ax = plt.subplots(figsize=(6, 3.5))
+            pivot.plot(kind="bar", ax=ax, color=["navy", "teal"][: len(pivot.columns)], rot=0)
+            ax.axhline(1.0, color="grey", linestyle="--", lw=1)
+            ax.set_xlabel("Horizon (months ahead)")
+            ax.set_ylabel("MASE")
+            ax.grid(True, axis="y", linestyle=":", alpha=0.6)
+            st.pyplot(fig)
+            plt.close(fig)
+
+    h_df = load_csv("holdout_metrics.csv")
+    if not h_df.empty:
+        st.markdown("### Holdout metrics, all candidates")
         s_hdf = h_df[h_df["series_id"] == selected_series]
         show_cols = [
             c
@@ -167,9 +266,40 @@ with tab_eval:
             )
         else:
             st.info(
-                "**PPI Oils & Fats Index**: Exponential Smoothing (B3 ETS) achieved superior validation accuracy "
-                "capturing structural trend inertia in producer price movements."
+                "**PPI Oils & Fats Index**: Exponential Smoothing (B3 ETS) won on validation. "
+                "On the holdout it only narrowly beat the naive forecast."
             )
+
+    st.divider()
+    st.subheader("Live: Published Forecasts Scored Against Actuals")
+    st.caption(
+        "LIVE. Forecasts issued by the scheduled pipeline, scored once the actual is published."
+    )
+    live = history_df
+    if not live.empty and "series_id" in live.columns:
+        live = live[live["series_id"] == selected_series]
+    if not live.empty and "y_actual" in live.columns:
+        live_cols = [
+            c
+            for c in [
+                "origin_month",
+                "target_month",
+                "horizon",
+                "y_pred",
+                "y_actual",
+                "abs_pct_error",
+                "mase",
+                "interval_hit_80",
+                "interval_hit_90",
+            ]
+            if c in live.columns
+        ]
+        st.dataframe(live[live_cols], use_container_width=True)
+    else:
+        st.info(
+            "No live forecast has been scored yet. The first scores appear after the next "
+            "monthly actuals are published."
+        )
 
 with tab_drift:
     st.subheader("Feature Drift & Monitoring (PSI / KS Test)")
