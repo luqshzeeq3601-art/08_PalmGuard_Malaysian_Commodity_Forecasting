@@ -1,0 +1,17 @@
+{
+  "timestamp_utc": "2026-10-11T17:26:02+00:00",
+  "scored_once": true,
+  "exploratory_override": false,
+  "champions": {
+    "palm_wb_myr": "B1",
+    "ppi_oilsfats_my": "B3"
+  },
+  "interval_methods": {
+    "palm_wb_myr": "C1",
+    "ppi_oilsfats_my": "C1"
+  },
+  "target_series": [
+    "palm_wb_myr",
+    "ppi_oilsfats_my"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "project_name": "PalmGuard",
+  "version": "0.1.0",
+  "timestamp_utc": "2026-10-12T00:28:11+00:00",
+  "frozen_vintage_date": "2026-10-11",
+  "selection_rules": [
+    "1. Lowest pooled validation MASE wins.",
+    "2. If within 2% relative MASE tie threshold, the simpler candidate wins (Order: B1, B2, B3, B4, M1, M2).",
+    "3. Conformal interval method chosen by lower mean |empirical coverage - nominal| on validation first, mean width second."
+  ],
+  "series": {
+    "palm_wb_myr": {
+      "series_id": "palm_wb_myr",
+      "display_name": "Malaysian palm oil price (World Bank Pink Sheet, MYR/mt)",
+      "champion_model": "B1",
+      "champion_reason": "Candidate B1 (MASE 3.0992) is simpler than best B4 (MASE 3.0606) and falls within 2.0% relative MASE threshold.",
+      "champion_validation_mase": 3.099219575875866,
+      "champion_validation_wape": 0.09642387298426129,
+      "selected_interval_method": "C2",
+      "interval_method_reason": "C2 selected by lower validation coverage error (0.0389 vs 0.0528).",
+      "all_candidate_mase": {
+        "B1": 3.099219575875866,
+        "B2": 8.56730575646265,
+        "B3": 3.2933028864216434,
+        "B4": 3.060605097283194,
+        "M1": 3.2513986725380812,
+        "M2": 3.503007430641018
+      },
+      "all_candidate_wape": {
+        "B1": 0.09642387298426129,
+        "B2": 0.2665486526055594,
+        "B3": 0.1024622526557443,
+        "B4": 0.09522248744573553,
+        "M1": 0.10115851586069258,
+        "M2": 0.10898664495547895
+      },
+      "within_tie_threshold_models": [
+        "B1",
+        "B4"
+      ]
+    },
+    "ppi_oilsfats_my": {
+      "series_id": "ppi_oilsfats_my",
+      "display_name": "DOSM Producer Price Index — SITC Section 4: Animal and vegetable oils and fats (2010=100)",
+      "champion_model": "B3",
+      "champion_reason": "Lowest pooled validation MASE (1.1900).",
+      "champion_validation_mase": 1.1899531184548222,
+      "champion_validation_wape": 0.020499591166608884,
+      "selected_interval_method": "C2",
+      "interval_method_reason": "C2 selected by lower validation coverage error (0.0562 vs 0.0944).",
+      "all_candidate_mase": {
+        "B1": 1.8051737790252544,
+        "B2": 6.890965918763509,
+        "B3": 1.1899531184548222,
+        "B4": 1.2256254324813565,
+        "M1": 1.4376699351524242,
+        "M2": 1.3720756454235568
+      },
+      "all_candidate_wape": {
+        "B1": 0.03109813645662968,
+        "B2": 0.11871222646243308,
+        "B3": 0.020499591166608884,
+        "B4": 0.021114126178257416,
+        "M1": 0.024767064723876957,
+        "M2": 0.02363705707781781
+      },
+      "within_tie_threshold_models": [
+        "B3"
+      ]
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "source": "dosm",
+  "dataset": "trade_sitc_1d",
+  "request_url": "https://storage.dosm.gov.my/trade/trade_sitc_1d.parquet",
+  "resolved_url": "https://storage.dosm.gov.my/trade/trade_sitc_1d.parquet",
+  "http_status": 200,
+  "retrieved_at_utc": "2026-10-11T16:09:31+00:00",
+  "sha256": "6566da79934f245e3b8f3e5bce0445a80bb368ee8bd0867187c51f5aefc7ae35",
+  "bytes": 50943,
+  "schema_version": "1.0",
+  "row_count": 319,
+  "snapshot_id": "dosm.trade_sitc_1d.2026-10-11.6566da79934f",
+  "filename": "trade_sitc_1d.parquet"
+}

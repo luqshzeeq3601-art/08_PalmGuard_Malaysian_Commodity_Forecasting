@@ -1,0 +1,56 @@
+[
+  {
+    "desc_bm": "Makanan",
+    "desc_en": "Food",
+    "digits": 1,
+    "section": "0"
+  },
+  {
+    "desc_bm": "Minuman dan tembakau",
+    "desc_en": "Beverages and tobacco",
+    "digits": 1,
+    "section": "1"
+  },
+  {
+    "desc_bm": "Bahan-bahan mentah tidak boleh dimakan, kecuali bahan api",
+    "desc_en": "Crude materials, inedible, except fuel",
+    "digits": 1,
+    "section": "2"
+  },
+  {
+    "desc_bm": "Bahan api, galian pelincir, dll.",
+    "desc_en": "Mineral fuels, lubricants, etc",
+    "digits": 1,
+    "section": "3"
+  },
+  {
+    "desc_bm": "Minyak dan lemak binatang, dan sayur-sayuran",
+    "desc_en": "Animal and vegetable oils, and fats",
+    "digits": 1,
+    "section": "4"
+  },
+  {
+    "desc_bm": "Bahan kimia",
+    "desc_en": "Chemicals",
+    "digits": 1,
+    "section": "5"
+  },
+  {
+    "desc_bm": "Barang-barang keluaran kilang",
+    "desc_en": "Manufactured goods",
+    "digits": 1,
+    "section": "6"
+  },
+  {
+    "desc_bm": "Jentera dan kelengkapan pengangkutan",
+    "desc_en": "Machinery and transport equipment",
+    "digits": 1,
+    "section": "7"
+  },
+  {
+    "desc_bm": "Pelbagai barang keluaran kilang",
+    "desc_en": "Miscellaneous manufactured goods",
+    "digits": 1,
+    "section": "8"
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "source": "bnm",
+  "dataset": "exchangerates_daily_1700",
+  "request_url": "https://storage.data.gov.my/finsector/exr/daily_1700.parquet",
+  "resolved_url": "https://storage.data.gov.my/finsector/exr/daily_1700.parquet",
+  "http_status": 200,
+  "retrieved_at_utc": "2026-10-11T16:09:31+00:00",
+  "sha256": "38f4608f4ccb3a67db2620496c6d59afcb8794db8f1a0d6aafa693e98f142cbb",
+  "bytes": 1528850,
+  "schema_version": "1.0",
+  "row_count": 5759,
+  "snapshot_id": "bnm.exchangerates_daily_1700.2026-10-11.38f4608f4ccb",
+  "filename": "daily_1700.parquet"
+}

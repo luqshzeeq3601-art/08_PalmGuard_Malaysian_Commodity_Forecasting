@@ -1,0 +1,14 @@
+{
+  "source": "dosm",
+  "dataset": "sitc",
+  "request_url": "https://api.data.gov.my/data-catalogue/?id=sitc",
+  "resolved_url": "https://api.data.gov.my/data-catalogue/?id=sitc&limit=500",
+  "http_status": 200,
+  "retrieved_at_utc": "2026-10-11T16:09:32+00:00",
+  "sha256": "b4a304f998a124366b3d183b429eb28e7074d5571aecd3e4543a698e355efde7",
+  "bytes": 1237,
+  "schema_version": "1.0",
+  "row_count": 9,
+  "snapshot_id": "dosm.sitc.2026-10-11.b4a304f998a1",
+  "filename": "sitc.json"
+}
