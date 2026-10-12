@@ -38,7 +38,7 @@ Expected output:
 ```bash
 pytest
 ```
-Expected output: 81 tests passing, 0 errors, offline mock protections enforced.
+Expected output: 83 tests passing, 0 errors, offline mock protections enforced.
 
 ### Step 5: Execute Sequential Production Pipeline (Gate G5)
 ```bash

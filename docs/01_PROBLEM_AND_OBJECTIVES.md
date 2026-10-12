@@ -1,6 +1,6 @@
 # 01. Problem and objectives
 
-Status: DRAFT, 2026-10-11. No implementation exists yet.
+Status: FROZEN, 2026-10-11 (written before implementation). Measured results against these objectives are in `MODEL_CARD.md`.
 
 ## 1. Problem
 

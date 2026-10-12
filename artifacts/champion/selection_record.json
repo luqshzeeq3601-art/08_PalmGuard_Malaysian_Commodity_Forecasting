@@ -1,7 +1,7 @@
 {
   "project_name": "PalmGuard",
   "version": "0.1.0",
-  "timestamp_utc": "2026-10-12T00:28:11+00:00",
+  "timestamp_utc": "2026-10-12T02:07:49+00:00",
   "frozen_vintage_date": "2026-10-11",
   "selection_rules": [
     "1. Lowest pooled validation MASE wins.",

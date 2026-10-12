@@ -1,6 +1,6 @@
 # PalmGuard implementation plan
 
-Status: DRAFT, 2026-10-11. Implementation has not started and needs explicit approval.
+Status: IN PROGRESS, 2026-10-12. Planned 2026-10-11; 24 of 25 tasks complete, see `todo.md`.
 
 ## 1. Delivery approach
 

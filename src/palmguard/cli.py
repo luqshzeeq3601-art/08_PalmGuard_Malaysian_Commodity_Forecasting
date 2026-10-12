@@ -539,6 +539,11 @@ def main(argv: list[str] | None = None) -> int:
         default=Path("config/project.yaml"),
         help="Path to project configuration YAML",
     )
+    p_score.add_argument(
+        "--offline",
+        action="store_true",
+        help="Score against the frozen vintage instead of every snapshot retrieved so far",
+    )
 
     # monitor
     p_monitor = sub.add_parser("monitor", help="Run rolling metric and drift evaluation")
@@ -601,14 +606,19 @@ def main(argv: list[str] | None = None) -> int:
             )
             return 0
     if args.command == "score":
+        from datetime import datetime, timezone
+
         from palmguard.config import load_config
         from palmguard.features import build_monthly_panel_df
         from palmguard.pipeline import run_pipeline_score_step
 
         cfg = load_config(args.config)
-        panel = build_monthly_panel_df(
-            Path(cfg.paths.raw_dir), as_of=cfg.project.frozen_vintage_date
+        as_of = (
+            cfg.project.frozen_vintage_date
+            if args.offline
+            else datetime.now(timezone.utc).strftime("%Y-%m-%d")
         )
+        panel = build_monthly_panel_df(Path(cfg.paths.raw_dir), as_of=as_of)
         sc = run_pipeline_score_step(Path("."), cfg, panel)
         print(f"[*] Scored {len(sc)} forecasts against observed actuals.")
         return 0

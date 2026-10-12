@@ -37,7 +37,11 @@ from palmguard.evaluation import (
 )
 from palmguard.features import build_features_df, build_monthly_panel_df
 from palmguard.model import backtest_lgbm, generate_grid_configurations, select_best_lgbm_params
-from palmguard.reporting import origin_price_map, summarise_interval_coverage
+from palmguard.reporting import (
+    label_intervals,
+    origin_price_map,
+    summarise_interval_coverage,
+)
 from palmguard.splits import SeriesSplitManifest, load_split_manifest
 
 logger = logging.getLogger(__name__)
@@ -264,6 +268,7 @@ def score_holdout_intervals(
     """
     val_preds = pd.read_parquet(reports_dir / "predictions.parquet")
     frames: list[pd.DataFrame] = []
+    interval_frames: list[pd.DataFrame] = []
 
     for sid in cfg.targets.keys():
         champion = selection_record["series"][sid]["champion_model"]
@@ -292,9 +297,16 @@ def score_holdout_intervals(
             cov_df = summarise_interval_coverage(intervals_df, sid, champion, method, "holdout")
             cov_df["selected"] = method == selected
             frames.append(cov_df)
+            if method == selected:
+                interval_frames.append(
+                    label_intervals(intervals_df, sid, champion, method, "holdout")
+                )
 
     holdout_cov = pd.concat(frames, ignore_index=True)
     holdout_cov.to_csv(reports_dir / "holdout_coverage.csv", index=False)
+    pd.concat(interval_frames, ignore_index=True).to_csv(
+        reports_dir / "holdout_intervals.csv", index=False
+    )
 
     val_cov_csv = reports_dir / "validation_coverage.csv"
     if not val_cov_csv.is_file():
