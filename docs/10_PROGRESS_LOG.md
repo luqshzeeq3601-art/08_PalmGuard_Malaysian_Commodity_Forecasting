@@ -388,3 +388,16 @@
   - `palmguard doctor`: PASS. `pytest`: 81 passed. `palmguard pipeline run --offline`: success, 6 forecasts published.
 - O5 status: pending. No scheduled run has executed yet.
 - Checkpoint Gate G7: PASSED.
+
+## 2026-10-12 — Public release, T21 CI and T18 workflow dispatch (Gate G5 passed)
+
+- Security audit before release: no secrets, credentials or sensitive files in the tree or history. History was squashed to one commit before the first push because two early commits held local absolute paths; commits use the GitHub noreply address.
+- Repository published: https://github.com/luqshzeeq3601-art/08_PalmGuard_Malaysian_Commodity_Forecasting (public, branch `master`).
+- T21 CI:
+  - First run failed at dependency install: `pywin32==312` in the lock file has no Linux wheel. Pin restricted to `sys_platform == "win32"`.
+  - Run 38191218340: success. Ruff, 81 tests with coverage, Docker image build and container smoke test all green.
+- T18 scheduled workflow:
+  - `pipeline.yml` and `live-contract.yml` registered after a push that touched them (job timeouts added).
+  - Manual dispatch run 38191449036 (`mode=full`): success. All five sources `no_change`, 6 forecasts published, bot commit `181c7a2` updated `reports/published/`. No new raw snapshot was committed because no source had changed.
+- Checkpoint Gate G5: PASSED. Gate G6 remains partial: CI is green but T23 public deployment is not done.
+- O5 status: pending. First scheduled runs are due on the weekly and monthly cron.

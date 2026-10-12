@@ -77,6 +77,6 @@ Expected output:
 | **G2** | Leakage test suite green, split manifest frozen | **PASSED** | `data/processed/split_manifest.json`, `tests/test_features.py` |
 | **G3** | Validation selection complete, record frozen | **PASSED** | `artifacts/champion/selection_record.json`, `reports/validation_metrics.csv` |
 | **G4** | Holdout scored once with single-run guard | **PASSED** | `artifacts/champion/holdout_guard.json`, `reports/holdout_metrics.csv` |
-| **G5** | Pipeline idempotent on fixtures; a manual workflow dispatch publishes | **PARTIAL** | Idempotency: `tests/test_pipeline.py`. Workflow dispatch never run (no GitHub remote) |
-| **G6** | CI green including container smoke test; public URLs pass the smoke test | **NOT PASSED** | Local only: `tests/test_container_contract.py`, `scripts/smoke_api.py` on localhost. No CI run, no public URL |
+| **G5** | Pipeline idempotent on fixtures; a manual workflow dispatch publishes | **PASSED** | Idempotency: `tests/test_pipeline.py`. Manual dispatch run 38191449036 on 2026-10-12 succeeded and committed `reports/published/` |
+| **G6** | CI green including container smoke test; public URLs pass the smoke test | **PARTIAL** | CI run 38191218340 green on 2026-10-12, including Docker build and container smoke test. No public URL yet (T23) |
 | **G7** | Fresh-clone reproduction verified | **PASSED** | 2026-10-12: fresh clone, new Python 3.11 virtualenv, install from `requirements.lock.txt`: doctor PASS, 81 tests pass, `palmguard pipeline run --offline` succeeds, `pip freeze` matches the lock file. O5 pending (no scheduled run yet) |
