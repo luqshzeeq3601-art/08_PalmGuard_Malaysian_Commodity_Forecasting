@@ -410,3 +410,10 @@
   - Checked in a browser: page renders with 4 charts and no exception. The live section is empty until the first forecast is scored.
 - Status lines in `tasks/plan.md` and `docs/01_PROBLEM_AND_OBJECTIVES.md` no longer say implementation has not started.
 - `ruff check` and `ruff format --check`: clean. `pytest`: 83 passed.
+
+## 2026-10-12 — Dashboard redesign (light theme, Full HD desktop)
+
+- `.streamlit/config.toml`: light theme, 17px base font, one chart palette.
+- `dashboard/app.py`: series switch at the top (no sidebar), four tabs (Forecast, Accuracy, Data health, About the data), plain-language summary, bordered stat tiles, table views in expanders, content capped at 1480px for 1920px screens.
+- `dashboard/charts.py`: Altair charts with hover tooltips replace the static matplotlib figures (blue = actual, orange = forecast, pale wash = prediction range).
+- Checked at 1920px in headless Edge (Forecast tab) and all four charts rendered standalone; `tests/test_dashboard.py` passes.
