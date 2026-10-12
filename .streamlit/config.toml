@@ -1,0 +1,17 @@
+[theme]
+base = "light"
+primaryColor = "#1c5cab"
+backgroundColor = "#f9f9f7"
+secondaryBackgroundColor = "#f0efec"
+textColor = "#0b0b0b"
+borderColor = "#dddcd6"
+linkColor = "#1c5cab"
+font = "sans-serif"
+# Sized for a 1920x1080 desktop viewed at arm's length
+baseFontSize = 17
+baseRadius = "0.5rem"
+showWidgetBorder = true
+chartCategoricalColors = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#4a3aa7", "#e34948"]
+
+[client]
+toolbarMode = "minimal"
