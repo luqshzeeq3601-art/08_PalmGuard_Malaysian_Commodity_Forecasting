@@ -1,0 +1,14 @@
+{
+  "source": "bnm",
+  "dataset": "exchangerates_daily_1700",
+  "request_url": "https://api.data.gov.my/data-catalogue/?id=exchangerates_daily_1700",
+  "resolved_url": "https://api.data.gov.my/data-catalogue/?id=exchangerates_daily_1700&filter=middle%40rate_type&date_start=2026-06-11%40date&sort=date&limit=500",
+  "http_status": 200,
+  "retrieved_at_utc": "2026-10-19T08:22:38+00:00",
+  "sha256": "82869d1870fe2907b35fca0d6d6a8be0de15351b916ac4503263f5022762a9fc",
+  "bytes": 503023,
+  "schema_version": "1.0",
+  "row_count": 5676,
+  "snapshot_id": "bnm.exchangerates_daily_1700.2026-10-19.82869d1870fe",
+  "filename": "exchangerates_daily_1700.json"
+}
