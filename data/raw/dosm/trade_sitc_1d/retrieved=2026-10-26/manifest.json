@@ -1,0 +1,14 @@
+{
+  "source": "dosm",
+  "dataset": "trade_sitc_1d",
+  "request_url": "https://api.data.gov.my/data-catalogue/?id=trade_sitc_1d",
+  "resolved_url": "https://api.data.gov.my/data-catalogue/?id=trade_sitc_1d&filter=4%40section&date_start=2026-04-03%40date&sort=date&limit=500",
+  "http_status": 200,
+  "retrieved_at_utc": "2026-10-26T08:23:26+00:00",
+  "sha256": "d05d7c013e7d2592aa76437b95f51f7038035f2f3291e0e198e7c809ee0215ac",
+  "bytes": 35634,
+  "schema_version": "1.0",
+  "row_count": 321,
+  "snapshot_id": "dosm.trade_sitc_1d.2026-10-26.d05d7c013e7d",
+  "filename": "trade_sitc_1d.json"
+}
