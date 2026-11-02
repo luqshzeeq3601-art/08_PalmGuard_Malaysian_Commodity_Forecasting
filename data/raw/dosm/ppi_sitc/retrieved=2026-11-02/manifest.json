@@ -1,0 +1,14 @@
+{
+  "source": "dosm",
+  "dataset": "ppi_sitc",
+  "request_url": "https://api.data.gov.my/data-catalogue/?id=ppi_sitc",
+  "resolved_url": "https://api.data.gov.my/data-catalogue/?id=ppi_sitc&filter=abs%40series%2C4%40section&date_start=2026-04-03%40date&sort=date&limit=500",
+  "http_status": 200,
+  "retrieved_at_utc": "2026-11-02T10:26:18+00:00",
+  "sha256": "ce57304fb0e5ccff0e76618c98564a45be7747daa4ed66bb448a53944319adf4",
+  "bytes": 19016,
+  "schema_version": "1.0",
+  "row_count": 201,
+  "snapshot_id": "dosm.ppi_sitc.2026-11-02.ce57304fb0e5",
+  "filename": "ppi_sitc.json"
+}
