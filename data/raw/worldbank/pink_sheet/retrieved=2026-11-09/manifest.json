@@ -1,0 +1,14 @@
+{
+  "source": "worldbank",
+  "dataset": "pink_sheet",
+  "request_url": "https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx",
+  "resolved_url": "https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx",
+  "http_status": 200,
+  "retrieved_at_utc": "2026-11-09T10:46:25+00:00",
+  "sha256": "3c8d9d8dbb48342fdbf24777c39a8ce8964cc2fd0958f72f6779e6e4ad99cde2",
+  "bytes": 587760,
+  "schema_version": "1.0",
+  "row_count": 2406,
+  "snapshot_id": "worldbank.pink_sheet.2026-11-09.3c8d9d8dbb48",
+  "filename": "CMO-Historical-Data-Monthly.xlsx"
+}
